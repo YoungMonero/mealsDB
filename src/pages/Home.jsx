@@ -3,20 +3,31 @@ import Header from '../component/Header'
 import SearchInput from "../component/Search.jsx";
 import Spinner from "../component/Spinner.jsx";
 import Categories from "../component/Categories.jsx";
+import {useDebounce} from "react-use";
+import MealCard from "../component/Cart.jsx";
 
 const Home = () => {
 
     const API_BASE_URL = 'https://www.themealdb.com/api/json/v1/1'
     const [mealList, setMealList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [errorMassage, setErrorMassage] = useState('');
+    const [errorMassage, setErrorMassage] = useState(null);
+    const [search, setSearch] = useState('');
+    const [searchPage, setSearchPage] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
+    const [searchError, setSearchError] = useState('');
+    
 
-    const  fetchMeals = async () => {
+    useDebounce(() =>setDebouncedSearch(search),500,[search])
+
+    const  fetchMeals = async (s = '') => {
         setIsLoading(true);
         setErrorMassage('')
 
         try {
-            const endpoint = `${API_BASE_URL}/categories.php`;
+            const endpoint = s ?
+                `${API_BASE_URL}/search.php?s=${encodeURIComponent(s)}`:
+                `${API_BASE_URL}/categories.php`
             const response = await fetch(endpoint)
 
 
@@ -24,14 +35,21 @@ const Home = () => {
                 throw new Error('Error fetching categories.');
             }
             const data = await response.json();
+
             console.log(data);
+           // if(data.categories){
+                setMealList(data.categories);
+           // }else if (data?.meals){
+                 setSearchPage(data?.meals);
+           // }else{
+           //  setErrorMassage('meal not found')
+           // }
+           
+            
 
-            if (data.Response === 'false') {
-                setErrorMassage(data.Error || 'fail to fetch categories.');
-                setMealList([])
-            }
+           
 
-            setMealList(data.categories);
+           
 
 
         }catch (error) {
@@ -43,24 +61,40 @@ const Home = () => {
     }
 
     useEffect(() => {
-        fetchMeals()
-    }, []);
+        fetchMeals(debouncedSearch)
+    }, [debouncedSearch]);
 
     return (
         <div>
             <Header/>
-            <SearchInput/>
+            <SearchInput search={search} setSearch={setSearch}/>
             <div className="container">
-                <h2>See all Categories</h2>
+
                 <div className="categories">
                     {
-                        isLoading ? (<Spinner/>): errorMassage ?(<p className='err'></p>):
+                        isLoading ? (<Spinner/>): errorMassage ?(<p className='err'>{errorMassage}</p>):
+
+                            searchPage ? (
+                                <div className="search-result">
+                                    <h3>Search result for meals with "{search}"</h3>
+                                    <ul className='list'>
+                                        {
+                                            searchPage.map((meals) => (
+                                                <MealCard key={meals.id} meals={meals} />
+                                            ))
+                                        } 
+                                    </ul>
+                                </div>
+                            ):
                             (
-                                <ul className='list'>
-                                    {mealList.slice(0, 12).map((categories) => (
-                                       <Categories key={categories.id} categories={categories} />
-                                    ))}
-                                </ul>
+                                <div>
+                                    <h2>See all Categories</h2>
+                                    <ul className='list'>
+                                        {mealList?.slice(0, 12).map((categories) => (
+                                            <Categories key={categories.id} categories={categories} />
+                                        )) }
+                                    </ul>
+                                </div>
                             )
                     }
                 </div>

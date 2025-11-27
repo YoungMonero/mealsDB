@@ -118,7 +118,7 @@ svg {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     margin-top: 80px;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 .cat-card {
@@ -126,10 +126,15 @@ svg {
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    box-shadow: -5px 8px 24px -15px rgba(66, 68, 90, 1);
+    border-radius: 10px;
+    background-color: #edececff; 
+    align-items: center;
 }
 
 .cat-card img {
-    width: 290px;
+    width: 250px;
+    margin-top: 20px;
 }
 
 .cat-card h3 {
@@ -140,4 +145,39 @@ svg {
     margin-top: 3rem;
     font-weight: 400;
     color: #f3693f;
+}
+
+.search-result {
+    margin-top: 40px;
+}
+
+.search-result h3 {
+    color: #f3693fff;
+}
+
+.card {
+    width: 270px;
+}
+
+.card img {
+    width: 100%;
+    height: 250px;
+    border-radius: 15px 15px 0 0;
+}
+
+.card-ftr {
+    display: flex;
+    gap: 0.8rem;
+    color: #9e9e9e;
+}
+
+.lc {
+    color: #484747;
+}
+
+.ctr {
+    background-color: #e2e2e2ff;
+    padding: 3px 15px;
+    border-radius: 30px;
+
 }
