@@ -133,7 +133,7 @@ svg {
 }
 
 .cat-card img {
-    width: 250px;
+    width: 100%;
     margin-top: 20px;
 }
 
@@ -151,12 +151,12 @@ svg {
     margin-top: 40px;
 }
 
-.search-result h3 {
+.search-result h3, .cat-n {
     color: #f3693fff;
 }
 
 .card {
-    width: 270px;
+    width: 100%;
 }
 
 .card img {

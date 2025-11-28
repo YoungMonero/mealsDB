@@ -5,6 +5,7 @@ import Spinner from "../component/Spinner.jsx";
 import Categories from "../component/Categories.jsx";
 import {useDebounce} from "react-use";
 import MealCard from "../component/Cart.jsx";
+import { Link } from 'react-router';
 
 const Home = () => {
 
@@ -15,7 +16,7 @@ const Home = () => {
     const [search, setSearch] = useState('');
     const [searchPage, setSearchPage] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
-    const [searchError, setSearchError] = useState('');
+    // const [searchError, setSearchError] = useState('');
     
 
     useDebounce(() =>setDebouncedSearch(search),500,[search])
@@ -91,7 +92,7 @@ const Home = () => {
                                     <h2>See all Categories</h2>
                                     <ul className='list'>
                                         {mealList?.slice(0, 12).map((categories) => (
-                                            <Categories key={categories.id} categories={categories} />
+                                            <Link to={`/categories/${categories.strCategory}`}><Categories key={categories.id} categories={categories} /></Link>
                                         )) }
                                     </ul>
                                 </div>
